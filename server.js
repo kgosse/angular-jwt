@@ -8,8 +8,8 @@ var faker = require('faker');
 var app = express();
 
 app.get('/random-user', function(req, res){
-    var user = faker.Helpers.userCard();
-    user.avatar = faker.Image.avatar();
+    var user = faker.helpers.userCard();
+    user.avatar = faker.image.avatar();
     res.json(user);
 });
 
