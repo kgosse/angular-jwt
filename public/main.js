@@ -21,7 +21,7 @@ app.controller('MainCtrl', function(RandomUserFactory, UserFactory){
 
     function login(username, password){
         UserFactory.login(username, password).then(function success(response){
-            vm.user = response.data;
+            vm.user = response.data.user;
         }, handleError);
     }
 
