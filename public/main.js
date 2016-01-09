@@ -16,6 +16,11 @@ app.controller('MainCtrl', function(RandomUserFactory, UserFactory){
     vm.login = login;
     vm.logout = logout;
 
+    // initialization
+    UserFactory.getUser().then(function success(response) {
+        vm.user = response.data;
+    });
+
     function getRandomUser(){
         RandomUserFactory.getUser().then((response)=>{
             vm.randomUser = response.data;
@@ -38,12 +43,13 @@ app.controller('MainCtrl', function(RandomUserFactory, UserFactory){
     }
 });
 
-app.factory('UserFactory', function($http, API_URL, AuthTokenFactory){
+app.factory('UserFactory', function($http, API_URL, AuthTokenFactory, $q){
     'use strict';
 
     return {
         login,
-        logout
+        logout,
+        getUser
     };
 
     function login(username, password){
@@ -58,6 +64,14 @@ app.factory('UserFactory', function($http, API_URL, AuthTokenFactory){
 
     function logout() {
         AuthTokenFactory.setToken();
+    }
+
+    function getUser() {
+        if (AuthTokenFactory.getToken()) {
+            return $http.get(API_URL + '/me');
+        } else {
+            return $q.reject({ data: 'client has no auth token' });
+        }
     }
 });
 
